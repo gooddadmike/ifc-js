@@ -40,8 +40,8 @@ have no weekday name and do not belong to any week.
 Both demos are built entirely on this package via CDN. View source to see
 the reference implementation.
 
-### IFC Desk Clock
-[https://gooddadmike.github.io/ifc-js/desk-clock.html](https://gooddadmike.github.io/ifc-js/desk-clock.html)
+### 🕐 IFC Desk Clock
+[Open Desk Clock →](https://gooddadmike.github.io/ifc-js/desk-clock.html)
 
 A desk clock is something you keep open for reference. Seeing the IFC date
 alongside the Gregorian date every time you glance at the time is how the
@@ -51,8 +51,8 @@ build the mapping — the desk clock keeps both systems in view so the IFC date
 becomes familiar over time. The IFC date might start feeling as natural as
 the Gregorian one depending on your other obligations.
 
-### IFC Calendars
-[https://gooddadmike.github.io/ifc-js/calendars.html](https://gooddadmike.github.io/ifc-js/calendars.html)
+### 📅 IFC Calendars
+[Open Calendars →](https://gooddadmike.github.io/ifc-js/calendars.html)
 
 An interactive dual calendar. Find any date on either side and the equivalent
 date in the other calendar is shown instantly. Browse by month and year
@@ -229,7 +229,7 @@ Replace `'UTC'` with any IANA timezone string such as `'America/New_York'`,
 
 ## Contributing
 
-See CONTRIBUTING.md in this repo.
+See [CONTRIBUTING.md](https://github.com/gooddadmike/ifc-js/blob/main/CONTRIBUTING.md) for guidelines.
 
 ---
 
