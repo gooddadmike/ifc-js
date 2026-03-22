@@ -1,0 +1,139 @@
+<!--
+  @gooddadmike/ifc-js — MIT — https://github.com/gooddadmike/ifc-js
+  Lucide Icons — MIT — https://lucide.dev
+  Served via jsDelivr CDN — https://jsdelivr.com
+-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>IFC Desk Clock</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="page">
+
+  <nav class="nav nav-bottom">
+    <a href="desk-clock.html" class="active"><i data-lucide="clock"></i></a>
+    <a href="index.html"><i data-lucide="home"></i></a>
+    <a href="calendars.html"><i data-lucide="calendar-days"></i></a>
+  </nav>
+
+  <div class="clock-page">
+    <div class="clock-layout" id="clock-layout">
+
+      <div class="clock-date" id="greg-panel">
+        <div class="date-line">
+          <span class="label">Gregorian</span>
+          <a class="value" id="greg-date" href="calendars.html">Loading…</a>
+        </div>
+      </div>
+
+      <div class="clock-face">
+        <h1 class="clock" id="clock">00:00</h1>
+      </div>
+
+      <div class="clock-date" id="ifc-panel">
+        <div class="date-line">
+          <span class="label">IFC</span>
+          <a class="value" id="ifc-date" href="calendars.html">Loading…</a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <script type="module">
+    import { toIFC } from 'https://cdn.jsdelivr.net/npm/@gooddadmike/ifc-js/src/index.esm.js';
+
+    const IFC_SHORT = ['Jan','Feb','Mar','Apr','May','Jun','Sol',
+                       'Jul','Aug','Sep','Oct','Nov','Dec'];
+    const WEEKDAYS  = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+    // ── Clock update ────────────────────────────────────────────────────────
+    function update() {
+      const now = new Date();
+
+      // Time
+      const h = String(now.getHours()).padStart(2, '0');
+      const m = String(now.getMinutes()).padStart(2, '0');
+      document.getElementById('clock').textContent = `${h}:${m}`;
+
+      // Gregorian
+      const gwd = now.toLocaleDateString('en-US', { weekday: 'short' });
+      const gmo = now.toLocaleDateString('en-US', { month:   'short' });
+      document.getElementById('greg-date').textContent =
+        `${gwd} ${gmo} ${now.getDate()}`;
+
+      // IFC via package
+      const pad  = n => String(n).padStart(2, '0');
+      const iso  = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
+      const ifc  = toIFC(iso);
+      let ifcStr;
+      if      (ifc.isLeapDay)  ifcStr = 'Jun 29 LPD';
+      else if (ifc.isYearDay)  ifcStr = 'Dec 29 YRD';
+      else {
+        const wd = WEEKDAYS[ifc.weekday];
+        ifcStr   = `${wd} ${IFC_SHORT[ifc.month - 1]} ${ifc.day}`;
+      }
+      document.getElementById('ifc-date').textContent = ifcStr;
+    }
+
+    setInterval(update, 60000);
+    update();
+
+    // ── Orientation detection ────────────────────────────────────────────────
+    const layout = document.getElementById('clock-layout');
+
+    const ro = new ResizeObserver(entries => {
+      const { width, height } = entries[0].contentRect;
+      const portrait = height > width;
+      layout.classList.toggle('layout-portrait',  portrait);
+      layout.classList.toggle('layout-landscape', !portrait);
+      layout.classList.add('reflow');
+      layout.addEventListener('animationend',
+        () => layout.classList.remove('reflow'), { once: true });
+    });
+    ro.observe(document.body);
+
+    // ── View Transition navigation ───────────────────────────────────────────
+    function navigateTo(url) {
+      if (!document.startViewTransition) {
+        window.location.href = url;
+        return;
+      }
+      document.startViewTransition(() => {
+        window.location.href = url;
+      });
+    }
+
+    // Intercept all nav and date links
+    document.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        navigateTo(a.href);
+      });
+    });
+
+    // ── Scroll to cycle pages ────────────────────────────────────────────────
+    const pages   = ['desk-clock.html', 'index.html', 'calendars.html'];
+    const current = 0;
+    let   scrollTimer;
+
+    window.addEventListener('wheel', e => {
+      clearTimeout(scrollTimer);
+      scrollTimer = setTimeout(() => {
+        const next = e.deltaY > 0
+          ? pages[(current + 1) % pages.length]
+          : pages[(current + pages.length - 1) % pages.length];
+        navigateTo(next);
+      }, 300);
+    }, { passive: true });
+  </script>
+
+  <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>lucide.createIcons();</script>
+
+</body>
+</html>
+
