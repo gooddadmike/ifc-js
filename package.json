@@ -1,0 +1,37 @@
+{
+  "name": "ifc-js",
+  "version": "1.0.0",
+  "description": "International Fixed Calendar conversion library — Gregorian to IFC and back",
+  "main": "src/index.js",
+  "module": "src/index.esm.js",
+  "exports": {
+    "require": "./src/index.js",
+    "import": "./src/index.esm.js"
+  },
+  "bin": {
+    "ifc": "./bin/ifc.js"
+  },
+  "scripts": {
+    "test": "jest"
+  },
+  "keywords": [
+    "ifc",
+    "international-fixed-calendar",
+    "calendar",
+    "date",
+    "cotsworth"
+  ],
+  "author": "mike@searcy.me",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gooddadmike/ifc-js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/gooddadmike/ifc-js/issues"
+  },
+  "homepage": "https://github.com/gooddadmike/ifc-js#readme",
+  "devDependencies": {
+    "jest": "^30.3.0"
+  }
+}
