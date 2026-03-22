@@ -53,19 +53,15 @@
     // ── Clock update ────────────────────────────────────────────────────────
     function update() {
       const now = new Date();
-
-      // Time
-      const h = String(now.getHours()).padStart(2, '0');
-      const m = String(now.getMinutes()).padStart(2, '0');
+      const h   = String(now.getHours()).padStart(2, '0');
+      const m   = String(now.getMinutes()).padStart(2, '0');
       document.getElementById('clock').textContent = `${h}:${m}`;
 
-      // Gregorian
       const gwd = now.toLocaleDateString('en-US', { weekday: 'short' });
       const gmo = now.toLocaleDateString('en-US', { month:   'short' });
       document.getElementById('greg-date').textContent =
         `${gwd} ${gmo} ${now.getDate()}`;
 
-      // IFC via package
       const pad  = n => String(n).padStart(2, '0');
       const iso  = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
       const ifc  = toIFC(iso);
@@ -84,7 +80,6 @@
 
     // ── Orientation detection ────────────────────────────────────────────────
     const layout = document.getElementById('clock-layout');
-
     const ro = new ResizeObserver(entries => {
       const { width, height } = entries[0].contentRect;
       const portrait = height > width;
@@ -107,7 +102,6 @@
       });
     }
 
-    // Intercept all nav and date links
     document.querySelectorAll('a').forEach(a => {
       a.addEventListener('click', e => {
         e.preventDefault();
@@ -115,10 +109,12 @@
       });
     });
 
-    // ── Scroll to cycle pages ────────────────────────────────────────────────
+    // ── Scroll / swipe to cycle pages ───────────────────────────────────────
     const pages   = ['desk-clock.html', 'index.html', 'calendars.html'];
     const current = 0;
     let   scrollTimer;
+    let   touchStartX = 0;
+    let   touchStartY = 0;
 
     window.addEventListener('wheel', e => {
       clearTimeout(scrollTimer);
@@ -129,6 +125,22 @@
         navigateTo(next);
       }, 300);
     }, { passive: true });
+
+    window.addEventListener('touchstart', e => {
+      touchStartX = e.touches[0].clientX;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener('touchend', e => {
+      const dx = e.changedTouches[0].clientX - touchStartX;
+      const dy = e.changedTouches[0].clientY - touchStartY;
+      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
+      const next = dx < 0
+        ? pages[(current + 1) % pages.length]
+        : pages[(current + pages.length - 1) % pages.length];
+      navigateTo(next);
+    }, { passive: true });
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
