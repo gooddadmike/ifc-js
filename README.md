@@ -1,36 +1,36 @@
 # ifc-js
 
-A lightweight JavaScript library for converting dates between the Gregorian 
+A lightweight JavaScript library for converting dates between the Gregorian
 calendar and the International Fixed Calendar (IFC).
 
 ## What is the International Fixed Calendar?
 
-The Gregorian calendar has months of 28, 29, 30, and 31 days — so your 
-birthday falls on a different weekday every year and nothing lines up 
+The Gregorian calendar has months of 28, 29, 30, and 31 days so your
+birthday falls on a different weekday every year and nothing lines up
 neatly. The International Fixed Calendar fixes this.
 
-13 months × 28 days = 364 days. Every date falls on the same weekday, every 
-year. Your birthday is always on the same day of the week. The first of every 
+13 months x 28 days = 364 days. Every date falls on the same weekday every
+year. Your birthday is always on the same day of the week. The first of every
 month is always a Sunday. Most civil holidays stay put.
 
-Got something you do every other day? Water the plants, take a supplement, 
-whatever it is. With IFC you can just look at the date number and know. With 
-Gregorian, months can end on an odd day — so you'd have to skip a day just 
+Got something you do every other day? Water the plants, take a supplement,
+whatever it is. With IFC you can just look at the date number and know. With
+Gregorian, months can end on an odd day so you would have to skip a day just
 to stay on schedule. IFC months always end on day 28. No skipping. Ever.
 
 Months: Jan, Feb, Mar, Apr, May, Jun, **Sol**, Jul, Aug, Sep, Oct, Nov, Dec
 
 ### Bonus Days
 
-The remaining day (or two in a leap year) becomes something more interesting 
-than just another Tuesday. These intercalary days sit at the end of their 
+The remaining day (or two in a leap year) becomes something more interesting
+than just another Tuesday. These intercalary days sit at the end of their
 month like a 29th day but belong to no week and no weekday.
 
-- 🎆 **Year Day** (Dec 29) — after the last day of December every year. 
+- 🎆 **Year Day** (Dec 29) — after the last day of December every year.
   New Year's Eve elevated: a day outside the week, a pause between years.
-- ☀️ **Leap Day** (Jun 29) — after June 28 in leap years only. In any 
-  normal IFC month, day 28 is a Saturday. Instead of a lost Sunday, this 
-  becomes a once-every-four-years midsummer holiday outside the week entirely.
+- ☀️ **Leap Day** (Jun 29) — after June 28 in leap years only. In any
+  normal IFC month, day 28 is a Saturday. Instead of a lost Sunday, this
+  becomes a once every four years midsummer holiday outside the week entirely.
 
 ---
 
@@ -51,10 +51,10 @@ npm install -g ifc-js
 # Today's date in IFC
 ifc
 
-# Gregorian → IFC
+# Gregorian to IFC
 ifc 2024-06-17
 
-# IFC → Gregorian
+# IFC to Gregorian
 ifc IFC:2024-06-29
 ```
 
@@ -91,12 +91,12 @@ toIFC('2024-06-17');
 toIFC('2026-12-31');
 // { year: 2026, month: 13, day: 29, weekday: null, isLeapDay: false, isYearDay: true }
 
-// No argument — uses today
+// No argument uses today
 toIFC();
 ```
 
-Months are 1-based: 1=January, 7=Sol, 13=December.  
-`weekday` is `null` for Leap Day and Year Day — they have no weekday.
+Months are 1-based: 1=January, 7=Sol, 13=December.
+`weekday` is `null` for Leap Day and Year Day as they have no weekday.
 
 ---
 
@@ -134,27 +134,32 @@ import { toIFC, toGregorian, isLeap } from 'ifc-js';
 
 ---
 
-## ⚠️ IFC Date Format
+## IFC Date Format
 
-IFC dates **must** use the `IFC:` prefix. Without it the parser assumes 
-Gregorian. This is not optional — the same numeric string means different 
+IFC dates must use the `IFC:` prefix. Without it the parser assumes
+Gregorian. This is not optional. The same numeric string means different
 things in each calendar:
 ```
-2024-07-15       → Gregorian July 15
-IFC:2024-07-15   → IFC Sol 15 (Gregorian July 2nd)
+2024-07-15       -> Gregorian July 15
+IFC:2024-07-15   -> IFC Sol 15 (Gregorian July 2nd)
 ```
 
 IFC month numbers are 1-based and go up to 13:
 
-| Number | Month    |
-|--------|----------|
-| 1–6    | Jan–Jun  |
-| 7      | Sol      |
-| 8–13   | Jul–Dec  |
+| Number | Month   |
+|--------|---------|
+| 1 - 6  | Jan-Jun |
+| 7      | Sol     |
+| 8 - 13 | Jul-Dec |
+
+---
+
+## Contributing
+
+See [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ---
 
 ## License
 
 MIT
-
