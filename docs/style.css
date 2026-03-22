@@ -45,7 +45,6 @@ body {
 }
 
 /* ── Orientation reflow animation ────────────────────────────────────────── */
-/* Slides horizontally to suggest a layout shift rather than a page change */
 .reflow {
   animation: reflow 0.15s ease;
 }
@@ -55,22 +54,16 @@ body {
 }
 
 /* ── View Transitions ────────────────────────────────────────────────────── */
-
-/* Default cross-fade for the whole page */
 ::view-transition-old(root),
 ::view-transition-new(root) {
   animation-duration: 0.25s;
   animation-timing-function: ease;
 }
-
-/* Nav stays fixed across pages — no transition */
 ::view-transition-old(nav),
 ::view-transition-new(nav) {
   animation: none;
   mix-blend-mode: normal;
 }
-
-/* Clock and conversion display morph between pages */
 ::view-transition-old(clock-display),
 ::view-transition-new(clock-display),
 ::view-transition-old(conversion),
@@ -79,13 +72,12 @@ body {
   animation-timing-function: ease-in-out;
 }
 
-/* Named transition elements — only one per name per page */
+/* Named transition elements */
 .nav                { view-transition-name: nav; }
 .clock              { view-transition-name: clock-display; }
 .conversion-display { view-transition-name: conversion; }
 
-/* Each page container shares the name across pages — safe since they
-   are on separate documents and only one exists at a time */
+/* One per page — safe across separate documents */
 .clock-page,
 .calendars-page,
 .info-page          { view-transition-name: main-content; }
@@ -137,8 +129,6 @@ body {
   height: 100%;
 }
 
-/* Clock date panels — same in both orientations, direction comes from
-   .layout-portrait / .layout-landscape on the parent */
 .clock-date {
   flex: 1;
   display: flex;
@@ -160,8 +150,6 @@ body {
   color: var(--clock);
   line-height: 1;
 }
-
-/* In landscape constrain by height not width */
 .clock-layout.layout-landscape .clock {
   font-size: clamp(3rem, 14vh, 12rem);
 }
@@ -191,21 +179,27 @@ body {
 
 /* ── Calendars page (calendars.html) ─────────────────────────────────────── */
 .calendars-page {
-  padding: 1.5rem 1rem var(--nav-clearance);
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0.5rem 0.5rem var(--nav-clearance);
 }
 
 .conversion-display {
   text-align: center;
   font-family: monospace;
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: var(--muted);
-  margin-bottom: 1.5rem;
-  min-height: 1.4em;
+  margin-bottom: 0.5rem;
+  min-height: 1.2em;
+  flex-shrink: 0;
 }
 
 .calendars {
   display: flex;
-  gap: 1rem;
+  gap: 0.75rem;
+  flex: 1;
+  min-height: 0;
   width: 100%;
   max-width: 860px;
   margin: 0 auto;
@@ -213,34 +207,40 @@ body {
 
 .cal {
   flex: 1;
+  min-height: 0;
+  min-width: 0;
   background: var(--card);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 1rem;
-  min-width: 0;
+  padding: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .cal h2 {
   text-align: center;
-  font-size: 0.9rem;
+  font-size: 0.85rem;
   text-transform: uppercase;
   letter-spacing: 0.08em;
   color: var(--accent);
-  margin: 0 0 0.8rem;
+  margin: 0 0 0.5rem;
+  flex-shrink: 0;
 }
 
 .cal-nav {
   display: flex;
   align-items: center;
   gap: 0.4rem;
-  margin-bottom: 0.6rem;
+  margin-bottom: 0.5rem;
+  flex-shrink: 0;
 }
 .cal-nav button {
   background: var(--surface);
   border: 1px solid var(--border);
   color: var(--text);
-  width: 28px;
-  height: 28px;
+  width: 26px;
+  height: 26px;
   border-radius: 6px;
   cursor: pointer;
   font-size: 1rem;
@@ -254,40 +254,45 @@ body {
   border: 1px solid var(--border);
   color: var(--text);
   border-radius: 6px;
-  padding: 0.2rem 0.4rem;
-  font-size: 0.85rem;
+  padding: 0.15rem 0.3rem;
+  font-size: 0.8rem;
 }
 .cal-nav select               { flex: 1; }
-.cal-nav input[type="number"] { width: 64px; text-align: center; }
+.cal-nav input[type="number"] { width: 58px; text-align: center; }
 
 .weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.15rem;
+  flex-shrink: 0;
 }
 .weekdays span {
   text-align: center;
-  font-size: 0.65rem;
+  font-size: 0.6rem;
   color: var(--muted);
   font-weight: bold;
   text-transform: uppercase;
-  padding: 0.15rem 0;
+  padding: 0.1rem 0;
 }
 
 .days {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 2px;
+  gap: 1px;
+  flex: 1;
+  min-height: 0;
+  align-content: start;
 }
+
 .day {
   aspect-ratio: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 0.8rem;
+  font-size: 0.75rem;
   font-family: monospace;
   cursor: pointer;
-  border-radius: 6px;
+  border-radius: 4px;
   border: 1px solid transparent;
   position: relative;
   user-select: none;
@@ -312,8 +317,8 @@ body {
 .day.special {
   grid-column: 1 / -1;
   aspect-ratio: unset;
-  padding: 0.3rem;
-  font-size: 0.65rem;
+  padding: 0.25rem;
+  font-size: 0.6rem;
   font-weight: bold;
   letter-spacing: 0.05em;
   color: var(--accent);
@@ -327,7 +332,6 @@ body {
 .info-page {
   max-width: 860px;
   margin: 0 auto;
-  /* top clearance for nav-top, bottom clearance standard */
   padding: var(--nav-clearance) 1rem var(--nav-clearance);
 }
 #readme {
