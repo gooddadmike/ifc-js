@@ -43,7 +43,9 @@ the reference implementation.
 ### IFC Desk Clock
 [https://gooddadmike.github.io/ifc-js/desk-clock.html](https://gooddadmike.github.io/ifc-js/desk-clock.html)
 
-A desk clock is something you keep open for reference. The same way
+A desk clock is something you keep open for reference. Seeing the IFC date
+alongside the Gregorian date every time you glance at the time is how the
+IFC date starts to become meaningful rather than abstract. The same way
 someone learning military time sets their watch and lets their brain gradually
 build the mapping — the desk clock keeps both systems in view so the IFC date
 becomes familiar over time. The IFC date might start feeling as natural as
@@ -58,8 +60,6 @@ independently on each side. Handles all edge cases — Leap Day, Year Day, and
 the Sol month.
 
 ---
-
-## How the Math Works
 
 ## How the Math Works
 
@@ -244,3 +244,4 @@ See CONTRIBUTING.md in this repo.
 ## License
 
 MIT
+

@@ -52,7 +52,6 @@
 
     let use24 = false;
 
-    // ── Clock update ─────────────────────────────────────────────────────────
     function update() {
       const now  = new Date();
       let   h    = now.getHours();
@@ -68,13 +67,11 @@
           `${String(h).padStart(2, '0')}:${m}`;
       }
 
-      // Gregorian
       const gwd = now.toLocaleDateString('en-US', { weekday: 'short' });
       const gmo = now.toLocaleDateString('en-US', { month:   'short' });
       document.getElementById('greg-date').textContent =
         `${gwd} ${gmo} ${now.getDate()}`;
 
-      // IFC
       const pad = n => String(n).padStart(2, '0');
       const iso = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
       const ifc = toIFC(iso);
@@ -88,7 +85,6 @@
       document.getElementById('ifc-date').textContent = ifcStr;
     }
 
-    // ── Toggle 12/24 hour on clock tap ────────────────────────────────────────
     document.getElementById('clock').addEventListener('click', () => {
       use24 = !use24;
       update();
@@ -97,7 +93,6 @@
     setInterval(update, 60000);
     update();
 
-    // ── Orientation detection ─────────────────────────────────────────────────
     const layout = document.getElementById('clock-layout');
     const ro     = new ResizeObserver(entries => {
       const { width, height } = entries[0].contentRect;
