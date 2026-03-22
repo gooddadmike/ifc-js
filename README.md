@@ -1,4 +1,4 @@
-# ifc-js
+# @gooddadmike/ifc-js
 
 A lightweight JavaScript library for converting dates between the Gregorian
 calendar and the International Fixed Calendar (IFC).
@@ -26,9 +26,9 @@ The remaining day (or two in a leap year) becomes something more interesting
 than just another Tuesday. These intercalary days sit at the end of their
 month like a 29th day but belong to no week and no weekday.
 
-- 🎆 **Year Day** (Dec 29) — after the last day of December every year.
-  New Year's Eve elevated: a day outside the week, a pause between years.
-- ☀️ **Leap Day** (Jun 29) — after June 28 in leap years only. In any
+- 🎆 **Year Day** (Dec 29) after the last day of December every year.
+  New Years Eve elevated: a day outside the week, a pause between years.
+- ☀️ **Leap Day** (Jun 29) after June 28 in leap years only. In any
   normal IFC month, day 28 is a Saturday. Instead of a lost Sunday, this
   becomes a once every four years midsummer holiday outside the week entirely.
 
@@ -36,12 +36,12 @@ month like a 29th day but belong to no week and no weekday.
 
 ## Install
 ```bash
-npm install ifc-js
+npm install @gooddadmike/ifc-js
 ```
 
 For the CLI:
 ```bash
-npm install -g ifc-js
+npm install -g @gooddadmike/ifc-js
 ```
 
 ---
@@ -73,7 +73,7 @@ IFC:2024-06-29
 
 Converts a Gregorian date to an IFC result object.
 ```js
-const { toIFC } = require('ifc-js');
+const { toIFC } = require('@gooddadmike/ifc-js');
 
 toIFC('2026-03-22');
 // {
@@ -104,7 +104,7 @@ Months are 1-based: 1=January, 7=Sol, 13=December.
 
 Converts an IFC date string to a Gregorian ISO date string.
 ```js
-const { toGregorian } = require('ifc-js');
+const { toGregorian } = require('@gooddadmike/ifc-js');
 
 toGregorian('IFC:2024-06-29');  // '2024-06-17'  (Leap Day)
 toGregorian('IFC:2026-07-01');  // '2026-06-18'  (Sol 1)
@@ -117,7 +117,7 @@ toGregorian('IFC:2026-13-29');  // '2026-12-31'  (Year Day)
 
 Returns `true` if the given year is a leap year.
 ```js
-const { isLeap } = require('ifc-js');
+const { isLeap } = require('@gooddadmike/ifc-js');
 
 isLeap(2024);  // true
 isLeap(2026);  // false
@@ -129,7 +129,7 @@ isLeap(2000);  // true
 
 ### ES Modules
 ```js
-import { toIFC, toGregorian, isLeap } from 'ifc-js';
+import { toIFC, toGregorian, isLeap } from '@gooddadmike/ifc-js';
 ```
 
 ---
@@ -163,3 +163,4 @@ See [CONTRIBUTING.md](CONTRIBUTING.md).
 ## License
 
 MIT
+
