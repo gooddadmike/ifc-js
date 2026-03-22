@@ -12,7 +12,7 @@
   <title>IFC — About</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="page">
+<body>
 
   <nav class="nav nav-top">
     <a href="desk-clock.html"><i data-lucide="clock"></i></a>
@@ -24,69 +24,15 @@
     <div id="readme">Loading…</div>
   </div>
 
+  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script>
-    // ── Load README ──────────────────────────────────────────────────────────
     fetch('https://raw.githubusercontent.com/gooddadmike/ifc-js/main/README.md')
       .then(r => r.text())
       .then(md => {
-        document.getElementById('readme').innerHTML =
-          marked.parse(md);
+        document.getElementById('readme').innerHTML = marked.parse(md);
       });
-
-    // ── View Transition navigation ───────────────────────────────────────────
-    function navigateTo(url) {
-      if (!document.startViewTransition) {
-        window.location.href = url;
-        return;
-      }
-      document.startViewTransition(() => {
-        window.location.href = url;
-      });
-    }
-
-    document.querySelectorAll('a').forEach(a => {
-      if (a.closest('nav')) {
-        a.addEventListener('click', e => {
-          e.preventDefault();
-          navigateTo(a.href);
-        });
-      }
-    });
-
-    // ── Scroll / swipe to cycle pages ───────────────────────────────────────
-    const pages   = ['desk-clock.html', 'index.html', 'calendars.html'];
-    const current = 1;
-    let   scrollTimer;
-    let   touchStartX = 0;
-    let   touchStartY = 0;
-
-    window.addEventListener('wheel', e => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        const next = e.deltaY > 0
-          ? pages[(current + 1) % pages.length]
-          : pages[(current + pages.length - 1) % pages.length];
-        navigateTo(next);
-      }, 300);
-    }, { passive: true });
-
-    window.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
-      const next = dx < 0
-        ? pages[(current + 1) % pages.length]
-        : pages[(current + pages.length - 1) % pages.length];
-      navigateTo(next);
-    }, { passive: true });
   </script>
 
-  <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>
   <script>lucide.createIcons();</script>
 

@@ -11,7 +11,7 @@
   <title>IFC Calendars</title>
   <link rel="stylesheet" href="style.css">
 </head>
-<body class="page">
+<body>
 
   <nav class="nav nav-bottom">
     <a href="desk-clock.html"><i data-lucide="clock"></i></a>
@@ -76,7 +76,7 @@
     let gView  = { year: now.getFullYear(), month: now.getMonth() };
     let iView  = { year: now.getFullYear(), month: toIFC(todayISO).month };
 
-    // ── IFC month helpers ─────────────────────────────────────────────────────
+    // ── IFC month days ────────────────────────────────────────────────────────
     function ifcMonthDays(m, year) {
       if (m === 6  && isLeap(year)) return 29;
       if (m === 13)                 return 29;
@@ -85,8 +85,8 @@
 
     // ── Format conversion display ─────────────────────────────────────────────
     function formatConversion(iso) {
-      const ifc = toIFC(iso);
-      const d   = iso.split('-');
+      const ifc  = toIFC(iso);
+      const d    = iso.split('-');
       const gStr = `${GREG_SHORT[parseInt(d[1])-1]} ${parseInt(d[2])}, ${d[0]}`;
       let ifcStr;
       if      (ifc.isLeapDay)  ifcStr = `Jun 29 — Leap Day ${d[0]}`;
@@ -141,7 +141,8 @@
       const maxDay   = ifcMonthDays(month, year);
 
       for (let d = 1; d <= maxDay; d++) {
-        const el = document.createElement('div');
+        const el  = document.createElement('div');
+        const iso = toGregorian(`IFC:${year}-${pad(month)}-${pad(d)}`);
 
         if (d === 29) {
           el.className   = 'day special';
@@ -151,7 +152,6 @@
           el.textContent = d;
         }
 
-        const iso = toGregorian(`IFC:${year}-${pad(month)}-${pad(d)}`);
         if (iso === selISO)   el.classList.add('selected');
         if (iso === todayISO) el.classList.add('today');
         el.addEventListener('click', () => selectDate(iso));
@@ -236,61 +236,8 @@
       const portrait = height > width;
       cals.classList.toggle('layout-portrait',  portrait);
       cals.classList.toggle('layout-landscape', !portrait);
-      cals.classList.add('reflow');
-      cals.addEventListener('animationend',
-        () => cals.classList.remove('reflow'), { once: true });
     });
     ro.observe(document.body);
-
-    // ── View Transition navigation ────────────────────────────────────────────
-    function navigateTo(url) {
-      if (!document.startViewTransition) {
-        window.location.href = url;
-        return;
-      }
-      document.startViewTransition(() => {
-        window.location.href = url;
-      });
-    }
-
-    document.querySelectorAll('a').forEach(a => {
-      a.addEventListener('click', e => {
-        e.preventDefault();
-        navigateTo(a.href);
-      });
-    });
-
-    // ── Scroll / swipe to cycle pages ─────────────────────────────────────────
-    const pages   = ['desk-clock.html', 'index.html', 'calendars.html'];
-    const current = 2;
-    let   scrollTimer;
-    let   touchStartX = 0;
-    let   touchStartY = 0;
-
-    window.addEventListener('wheel', e => {
-      clearTimeout(scrollTimer);
-      scrollTimer = setTimeout(() => {
-        const next = e.deltaY > 0
-          ? pages[(current + 1) % pages.length]
-          : pages[(current + pages.length - 1) % pages.length];
-        navigateTo(next);
-      }, 300);
-    }, { passive: true });
-
-    window.addEventListener('touchstart', e => {
-      touchStartX = e.touches[0].clientX;
-      touchStartY = e.touches[0].clientY;
-    }, { passive: true });
-
-    window.addEventListener('touchend', e => {
-      const dx = e.changedTouches[0].clientX - touchStartX;
-      const dy = e.changedTouches[0].clientY - touchStartY;
-      if (Math.abs(dx) < 50 || Math.abs(dx) < Math.abs(dy)) return;
-      const next = dx < 0
-        ? pages[(current + 1) % pages.length]
-        : pages[(current + pages.length - 1) % pages.length];
-      navigateTo(next);
-    }, { passive: true });
 
     // ── Init ──────────────────────────────────────────────────────────────────
     buildDropdowns();
