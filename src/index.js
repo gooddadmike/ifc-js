@@ -29,7 +29,6 @@ function doyToGreg(year, doy) {
 }
 
 function ifcToDoy(year, mi, day) {
-  // mi is 1-based (1=Jan ... 7=Sol ... 13=Dec)
   if (mi === 6 && day === 29 && isLeap(year)) return 169;
   let doy = (mi - 1) * 28 + day;
   if (mi > 6 && isLeap(year)) doy += 1;
@@ -39,17 +38,23 @@ function ifcToDoy(year, mi, day) {
 function doyToIfc(year, doy) {
   const leap    = isLeap(year);
   const yearLen = leap ? 366 : 365;
-  if (leap && doy === 169)  return { month: 6,  day: 29, weekday: null, isLeapDay: true,  isYearDay: false };
+  if (leap && doy === 169) return { month: 6,  day: 29, weekday: null, isLeapDay: true,  isYearDay: false };
   if (doy === yearLen)      return { month: 13, day: 29, weekday: null, isLeapDay: false, isYearDay: true  };
   const adjDoy  = leap && doy > 169 ? doy - 1 : doy;
-  const mi      = Math.floor((adjDoy - 1) / 28) + 1;  // 1-based
+  const mi      = Math.floor((adjDoy - 1) / 28) + 1;
   const day     = (adjDoy - 1) % 28 + 1;
-  const weekday = (day - 1) % 7;                       // 0=Sun ... 6=Sat
+  const weekday = (day - 1) % 7;
   return { month: mi, day, weekday, isLeapDay: false, isYearDay: false };
 }
 
 // ─── Public API ───────────────────────────────────────────────────────────────
-function toIFC(input, options = {}) {
+
+/**
+ * Converts a Gregorian ISO date string to an IFC date object.
+ * @param {string} [input] - ISO date string e.g. '2024-06-17'. Omit for today.
+ * @returns {{ year: number, month: number, day: number, weekday: number|null, isLeapDay: boolean, isYearDay: boolean }}
+ */
+function toIFC(input) {
   let year, month0, day;
   if (input) {
     const [y, m, d] = String(input).split('-').map(Number);
@@ -67,19 +72,37 @@ function toIFC(input, options = {}) {
   return { year, ...doyToIfc(year, doy) };
 }
 
-function toGregorian(ifcString) {
-  if (!ifcString.startsWith('IFC:')) {
-    throw new Error('IFC dates must be prefixed with "IFC:" e.g. IFC:2024-07-15');
+/**
+ * Converts an IFC date to a Gregorian ISO date string.
+ * Accepts either an IFC date string ('IFC:YYYY-MM-DD') or an IFC date object.
+ * @param {string|{ year: number, month: number, day: number }} input
+ * @returns {string} Gregorian ISO date string e.g. '2024-06-17'
+ */
+function toGregorian(input) {
+  let year, month, day;
+
+  if (typeof input === 'object' && input !== null) {
+    // Accept IFC date object — either from toIFC() or built by hand
+    ({ year, month, day } = input);
+    if (!year || !month || !day) throw new Error('IFC date object must have year, month and day');
+  } else if (typeof input === 'string') {
+    if (!input.startsWith('IFC:')) {
+      throw new Error('IFC dates must be prefixed with "IFC:" e.g. IFC:2024-07-15');
+    }
+    const parts = input.slice(4).split('-').map(Number);
+    [year, month, day] = parts;
+    if (!year || !month || !day) throw new Error(`Invalid IFC date format: ${input}`);
+  } else {
+    throw new Error('toGregorian requires an IFC date string or object');
   }
-  const parts = ifcString.slice(4).split('-').map(Number);
-  const [year, month, day] = parts;
-  if (!year || !month || !day) throw new Error(`Invalid IFC date format: ${ifcString}`);
+
   if (month < 1 || month > 13) throw new Error(`IFC month must be 1-13, got ${month}`);
   if (day < 1 || day > 29)     throw new Error(`IFC day must be 1-29, got ${day}`);
   if (day === 29) {
-    if (month === 6 && !isLeap(year)) throw new Error(`Leap Day only exists in leap years`);
-    if (month !== 6 && month !== 13)  throw new Error(`Day 29 only valid for June (leap years) or December`);
+    if (month === 6 && !isLeap(year)) throw new Error('Leap Day only exists in leap years');
+    if (month !== 6 && month !== 13)  throw new Error('Day 29 only valid for June (leap years) or December');
   }
+
   const doy  = ifcToDoy(year, month, day);
   const g    = doyToGreg(year, doy);
   const date = new Date(year, g.month, g.day);
@@ -87,3 +110,4 @@ function toGregorian(ifcString) {
 }
 
 module.exports = { toIFC, toGregorian, isLeap };
+

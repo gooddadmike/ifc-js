@@ -123,6 +123,27 @@ describe('toGregorian', () => {
     expect(toGregorian('IFC:2026-13-28')).toBe('2026-12-30');
   });
 
+  test('accepts IFC date object from toIFC()', () => {
+    const ifc = toIFC('2024-06-17');
+    expect(toGregorian(ifc)).toBe('2024-06-17');
+  });
+
+  test('accepts hand-built IFC date object', () => {
+    expect(toGregorian({ year: 2026, month: 7, day: 1 })).toBe('2026-06-18');
+  });
+
+  test('hand-built object — Leap Day 2024', () => {
+    expect(toGregorian({ year: 2024, month: 6, day: 29 })).toBe('2024-06-17');
+  });
+
+  test('hand-built object — Year Day 2026', () => {
+    expect(toGregorian({ year: 2026, month: 13, day: 29 })).toBe('2026-12-31');
+  });
+
+  test('hand-built object — Jan 1', () => {
+    expect(toGregorian({ year: 2026, month: 1, day: 1 })).toBe('2026-01-01');
+  });
+
   test('throws without IFC: prefix', () => {
     expect(() => toGregorian('2024-06-17')).toThrow('IFC dates must be prefixed with "IFC:" e.g. IFC:2024-07-15');
   });
@@ -143,24 +164,33 @@ describe('toGregorian', () => {
     expect(() => toGregorian('IFC:2024-03-29')).toThrow('Day 29 only valid for June (leap years) or December');
   });
 
-  test('round trip — Gregorian → IFC → Gregorian', () => {
+  test('throws on invalid object — missing day', () => {
+    expect(() => toGregorian({ year: 2026, month: 3 })).toThrow('year, month and day');
+  });
+
+  test('throws on non-string non-object input', () => {
+    expect(() => toGregorian(12345)).toThrow('toGregorian requires an IFC date string or object');
+  });
+
+  test('round trip — Gregorian to IFC to Gregorian', () => {
     const start = '2024-08-15';
     const ifc   = toIFC(start);
-    const back  = toGregorian(`IFC:${ifc.year}-${ifc.month}-${ifc.day}`);
+    const back  = toGregorian(ifc);
     expect(back).toBe(start);
   });
 
   test('round trip — post leap day 2024', () => {
     const start = '2024-09-01';
     const ifc   = toIFC(start);
-    const back  = toGregorian(`IFC:${ifc.year}-${ifc.month}-${ifc.day}`);
+    const back  = toGregorian(ifc);
     expect(back).toBe(start);
   });
 
   test('round trip — Jan 1', () => {
     const start = '2026-01-01';
     const ifc   = toIFC(start);
-    const back  = toGregorian(`IFC:${ifc.year}-${ifc.month}-${ifc.day}`);
+    const back  = toGregorian(ifc);
     expect(back).toBe(start);
   });
 });
+
