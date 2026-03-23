@@ -80,21 +80,44 @@ body {
   height: 100%;
 }
 
+/* Date panels pulled toward clock via alignment */
 .clock-date {
   flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 0 0.5rem;
 }
+
+/* Portrait: top date pushes down, bottom date pushes up */
+.clock-layout.layout-portrait .clock-date:first-child {
+  align-items: flex-end;
+  padding-bottom: 0.5rem;
+}
+.clock-layout.layout-portrait .clock-date:last-child {
+  align-items: flex-start;
+  padding-top: 0.5rem;
+}
+
+/* Landscape: left date pushes right, right date pushes left */
+.clock-layout.layout-landscape .clock-date:first-child {
+  justify-content: flex-end;
+  padding-right: 1.5rem;
+}
+.clock-layout.layout-landscape .clock-date:last-child {
+  justify-content: flex-start;
+  padding-left: 1.5rem;
+}
+
 .clock-face {
-  flex: 1.4;
+  flex: 1.8;
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
 .clock {
-  font-size: clamp(4rem, 25vw, 20rem);
+  font-size: clamp(4rem, 28vw, 22rem);
   font-weight: 700;
   letter-spacing: 4px;
   margin: 0;
@@ -104,7 +127,7 @@ body {
   user-select: none;
 }
 .clock-layout.layout-landscape .clock {
-  font-size: clamp(4rem, 18vh, 16rem);
+  font-size: clamp(4rem, 22vh, 18rem);
 }
 .clock sup.ampm {
   font-size: 0.25em;
@@ -118,18 +141,18 @@ body {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
+  gap: 0.2rem;
   text-align: center;
 }
 .date-line .label {
   font-weight: bold;
   color: var(--accent);
-  font-size: clamp(0.7rem, 1.5vw, 1.2rem);
+  font-size: clamp(0.6rem, 1.2vw, 1rem);
   text-transform: uppercase;
   letter-spacing: 0.08em;
 }
 .date-line .value {
-  font-size: clamp(1rem, 3vw, 2.4rem);
+  font-size: clamp(0.9rem, 2.5vw, 2rem);
   color: var(--text);
   text-decoration: none;
   cursor: pointer;
@@ -255,17 +278,13 @@ body {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
   gap: 1px;
-  align-content: start;
   flex: 1;
   min-height: 0;
-  overflow: hidden;
 }
 
 .day {
-  aspect-ratio: 1;
   width: 100%;
-  max-width: 3rem;
-  max-height: 3rem;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -296,9 +315,6 @@ body {
 
 .day.special {
   grid-column: 1 / -1;
-  aspect-ratio: unset;
-  max-width: unset;
-  max-height: unset;
   padding: 0.25rem;
   font-size: 0.6rem;
   font-weight: bold;
@@ -309,6 +325,27 @@ body {
 }
 .day.special:hover         { border-color: var(--accent); }
 .day.special.selected      { background: var(--accent); color: #fff; border-color: var(--accent); }
+
+/* ── Small screen adjustments ────────────────────────────────────────────── */
+@media (max-height: 700px) {
+  .calendars-page {
+    padding: 0.25rem 0.25rem var(--nav-clearance);
+  }
+  .conversion-display {
+    margin-bottom: 0.25rem;
+    font-size: 0.75rem;
+  }
+  .cal {
+    padding: 0.4rem;
+  }
+  .cal h2 {
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+  }
+  .cal-nav {
+    margin-bottom: 0.25rem;
+  }
+}
 
 /* ── Info page (index.html) ──────────────────────────────────────────────── */
 .info-page {

@@ -74,12 +74,19 @@
     let gView  = { year: now.getFullYear(), month: now.getMonth() };
     let iView  = { year: now.getFullYear(), month: toIFC(todayISO).month };
 
+    // ── Helpers ───────────────────────────────────────────────────────────────
     function ifcMonthDays(m, year) {
       if (m === 6  && isLeap(year)) return 29;
       if (m === 13)                 return 29;
       return 28;
     }
 
+    function setGridRows(gridEl, totalCells) {
+      const rows = Math.ceil(totalCells / 7);
+      gridEl.style.gridTemplateRows = `repeat(${rows}, 1fr)`;
+    }
+
+    // ── Format conversion display ─────────────────────────────────────────────
     function formatConversion(iso) {
       const ifc  = toIFC(iso);
       const d    = iso.split('-');
@@ -94,6 +101,7 @@
       return `${gStr}  ↔  ${ifcStr}`;
     }
 
+    // ── Select a date ─────────────────────────────────────────────────────────
     function selectDate(iso) {
       selISO    = iso;
       const ifc = toIFC(iso);
@@ -103,6 +111,7 @@
       render();
     }
 
+    // ── Build Gregorian grid ──────────────────────────────────────────────────
     function buildGregGrid() {
       const { year, month } = gView;
       const grid     = document.getElementById('gDays');
@@ -125,8 +134,11 @@
         el.addEventListener('click', () => selectDate(iso));
         grid.appendChild(el);
       }
+
+      setGridRows(grid, firstDay + lastDay);
     }
 
+    // ── Build IFC grid ────────────────────────────────────────────────────────
     function buildIfcGrid() {
       const { year, month } = iView;
       const grid     = document.getElementById('iDays');
@@ -150,8 +162,11 @@
         el.addEventListener('click', () => selectDate(iso));
         grid.appendChild(el);
       }
+
+      setGridRows(grid, maxDay);
     }
 
+    // ── Build static rows ─────────────────────────────────────────────────────
     function buildWeekdays() {
       ['gWeekdays','iWeekdays'].forEach(id => {
         document.getElementById(id).innerHTML =
@@ -170,6 +185,7 @@
       });
     }
 
+    // ── Sync controls ─────────────────────────────────────────────────────────
     function syncControls() {
       document.getElementById('gMonth').value = gView.month;
       document.getElementById('gYear').value  = gView.year;
@@ -177,6 +193,7 @@
       document.getElementById('iYear').value  = iView.year;
     }
 
+    // ── Render ────────────────────────────────────────────────────────────────
     function render() {
       syncControls();
       buildGregGrid();
@@ -185,6 +202,7 @@
         formatConversion(selISO);
     }
 
+    // ── Nav handlers ──────────────────────────────────────────────────────────
     document.getElementById('gPrev').addEventListener('click', () => {
       if (gView.month === 0) { gView.month = 11; gView.year--; }
       else gView.month--;
@@ -218,6 +236,7 @@
       iView.year = parseInt(e.target.value); render();
     });
 
+    // ── Orientation detection ─────────────────────────────────────────────────
     const cals = document.getElementById('calendars');
     const ro   = new ResizeObserver(entries => {
       const { width, height } = entries[0].contentRect;
@@ -227,6 +246,7 @@
     });
     ro.observe(document.body);
 
+    // ── Init ──────────────────────────────────────────────────────────────────
     buildDropdowns();
     buildWeekdays();
     render();
