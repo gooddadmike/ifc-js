@@ -209,6 +209,29 @@ import { toIFC, toGregorian, isLeap } from '@gooddadmike/ifc-js';
 
 ---
 
+### Formatting and Locale
+
+`toIFC()` returns a structured object with numeric values for month,
+day and weekday. Formatting those numbers into display strings is
+intentionally left to the consumer — this keeps the library focused
+on math and gives you full control over language and style:
+```js
+const ifc    = toIFC('2026-03-22');
+const months = ['Jan','Feb','Mar','Apr','May','Jun','Sol',
+                'Jul','Aug','Sep','Oct','Nov','Dec'];
+const days   = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+
+console.log(`${months[ifc.month - 1]} ${ifc.day} ${days[ifc.weekday]}`);
+// "Mar 25 Wed"
+```
+
+If you need a pre-formatted watch-friendly string with locale support,
+see [pebble-ifc-complication](https://github.com/gooddadmike/pebble-ifc-complication)
+which wraps this library with configurable month names, weekday names,
+and special day labels.
+
+---
+
 ### TypeScript Shape
 
 Not a TypeScript package but here is the shape of an IFC date object
