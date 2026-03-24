@@ -7,7 +7,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>IFC Calendars</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -67,22 +67,21 @@
 
     const pad = n => String(n).padStart(2, '0');
 
+    // ── Kiosk mode ───────────────────────────────────────────────────────────
+    const params = new URLSearchParams(window.location.search);
+    if (params.get('kiosk') === 'true') {
+      document.querySelector('.nav').style.display = 'none';
+      document.querySelector('.calendars-page').style.setProperty('padding-bottom', '0.5rem');
+    }
+
+    // ── Today ────────────────────────────────────────────────────────────────
     const now      = new Date();
     const todayISO = `${now.getFullYear()}-${pad(now.getMonth()+1)}-${pad(now.getDate())}`;
 
+    // ── State ────────────────────────────────────────────────────────────────
     let selISO = todayISO;
     let gView  = { year: now.getFullYear(), month: now.getMonth() };
     let iView  = { year: now.getFullYear(), month: toIFC(todayISO).month };
-
-    const params = new URLSearchParams(window.location.search);
-
-    // ── Kiosk ─────────────────────────────────────────────────────────────────
-    if (params.get('kiosk') === 'true') { 
-      document.querySelector('.nav').style.display = 'none'; 
-      document.querySelector('.clock-page')?.style.setProperty('padding-bottom', '0');
-      document.querySelector('.calendars-page')?.style.setProperty('padding-bottom', '0.5rem');
-      document.querySelector('.info-page')?.style.setProperty('padding-bottom', '1rem'); 
-    }
 
     // ── Helpers ───────────────────────────────────────────────────────────────
     function ifcMonthDays(m, year) {
@@ -267,4 +266,3 @@
 
 </body>
 </html>
-
