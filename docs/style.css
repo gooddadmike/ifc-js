@@ -357,7 +357,7 @@ body {
 .info-page {
   max-width: 860px;
   margin: 0 auto;
-  padding: var(--nav-clearance) 1rem var(--nav-clearance);
+  padding: 1rem 1rem var(--nav-clearance);
 }
 #readme {
   background: var(--card);
