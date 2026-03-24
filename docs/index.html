@@ -31,6 +31,15 @@
       .then(md => {
         document.getElementById('readme').innerHTML = marked.parse(md);
       });
+
+    // ── Kiosk ─────────────────────────────────────────────────────────────────
+    if (params.get('kiosk') === 'true') { 
+      document.querySelector('.nav').style.display = 'none'; 
+      document.querySelector('.clock-page')?.style.setProperty('padding-bottom', '0');
+      document.querySelector('.calendars-page')?.style.setProperty('padding-bottom', '0.5rem');
+      document.querySelector('.info-page')?.style.setProperty('padding-bottom', '1rem'); 
+    }
+
   </script>
 
   <script src="https://cdn.jsdelivr.net/npm/lucide@latest/dist/umd/lucide.min.js"></script>

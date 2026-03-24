@@ -90,6 +90,14 @@
       update();
     });
 
+    // ── Kiosk ─────────────────────────────────────────────────────────────────
+    if (params.get('kiosk') === 'true') { 
+      document.querySelector('.nav').style.display = 'none'; 
+      document.querySelector('.clock-page')?.style.setProperty('padding-bottom', '0');
+      document.querySelector('.calendars-page')?.style.setProperty('padding-bottom', '0.5rem');
+      document.querySelector('.info-page')?.style.setProperty('padding-bottom', '1rem'); 
+    }
+
     setInterval(update, 60000);
     update();
 

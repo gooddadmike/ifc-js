@@ -74,6 +74,16 @@
     let gView  = { year: now.getFullYear(), month: now.getMonth() };
     let iView  = { year: now.getFullYear(), month: toIFC(todayISO).month };
 
+    const params = new URLSearchParams(window.location.search);
+
+    // ── Kiosk ─────────────────────────────────────────────────────────────────
+    if (params.get('kiosk') === 'true') { 
+      document.querySelector('.nav').style.display = 'none'; 
+      document.querySelector('.clock-page')?.style.setProperty('padding-bottom', '0');
+      document.querySelector('.calendars-page')?.style.setProperty('padding-bottom', '0.5rem');
+      document.querySelector('.info-page')?.style.setProperty('padding-bottom', '1rem'); 
+    }
+
     // ── Helpers ───────────────────────────────────────────────────────────────
     function ifcMonthDays(m, year) {
       if (m === 6  && isLeap(year)) return 29;
