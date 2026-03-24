@@ -80,7 +80,7 @@ body {
   height: 100%;
 }
 
-/* Date panels pulled toward clock via alignment */
+/* Date panels — base */
 .clock-date {
   flex: 1;
   display: flex;
@@ -89,17 +89,30 @@ body {
   padding: 0 0.5rem;
 }
 
-/* Portrait: top date pushes down, bottom date pushes up */
+.clock-face {
+  flex: 1.8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Portrait: tighter flex ratios pull dates closer to clock */
+.clock-layout.layout-portrait .clock-date {
+  flex: 0.6;
+}
+.clock-layout.layout-portrait .clock-face {
+  flex: 1;
+}
 .clock-layout.layout-portrait .clock-date:first-child {
   align-items: flex-end;
-  padding-bottom: 0.5rem;
+  padding-bottom: 0.25rem;
 }
 .clock-layout.layout-portrait .clock-date:last-child {
   align-items: flex-start;
-  padding-top: 0.5rem;
+  padding-top: 0.25rem;
 }
 
-/* Landscape: left date pushes right, right date pushes left */
+/* Landscape: dates pushed inward toward clock */
 .clock-layout.layout-landscape .clock-date:first-child {
   justify-content: flex-end;
   padding-right: 1.5rem;
@@ -107,13 +120,6 @@ body {
 .clock-layout.layout-landscape .clock-date:last-child {
   justify-content: flex-start;
   padding-left: 1.5rem;
-}
-
-.clock-face {
-  flex: 1.8;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
 
 .clock {
@@ -375,4 +381,3 @@ body {
   overflow-x: auto;
   border: 1px solid var(--border);
 }
-
