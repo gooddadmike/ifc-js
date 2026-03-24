@@ -21,6 +21,7 @@
     "date",
     "cotsworth"
   ],
+  "types": "index.d.ts",
   "author": "mike@searcy.me",
   "license": "MIT",
   "repository": {
