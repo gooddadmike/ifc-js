@@ -55,6 +55,20 @@ An interactive dual calendar. Find any date on either side and the equivalent
 date in the other calendar is shown instantly. Browse by month and year
 independently on each side.
 
+### 📱 Kiosk Mode
+
+Add `?kiosk=true` to either URL to hide the navigation bar for a cleaner
+display experience:
+
+```
+https://gooddadmike.github.io/ifc-js/desk-clock.html?kiosk=true
+https://gooddadmike.github.io/ifc-js/calendars.html?kiosk=true
+```
+
+On iOS, tap the share button in Safari and choose **Add to Home Screen** to
+pin it as a full-screen app icon. Combined with kiosk mode it makes a clean
+desk clock or calendar reference with no browser chrome.
+
 ---
 
 ## How the Math Works 🧮
